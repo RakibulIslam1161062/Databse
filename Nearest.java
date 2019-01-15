@@ -15,32 +15,91 @@ public class Nearest {
 	{
 		
 		
-		int totalData=0,k=0,parcent=0,bound;
+		int totalData=0,k=0,parcent=0,bound, tp,fn,fp,tn;
+		double precision,recall,f1Score;
 		DataBlock[] Db= new DataBlock[1110];
 		
 		Db=dataReader();
 		totalData=j;
 		bound=totalData/10;
-		System.out.println("total "+totalData);
+		
 		parcent=bound;
 		int [] num= new int[parcent];
 		
 		shuffle(Db,num,parcent,totalData);
 		knnAlgo(Db,num,bound,totalData);
-		
 		double accouracy=accouracyCheck(Db,num,bound,totalData);
-		
-		
+			    
+	    tp=truePos(Db,num,bound);
+	    fn=falseNeg(Db,num,bound);
+	    fp=falsePos(Db,num,bound);
+	    tn=trueNeg(Db,num,bound);
+	    
+	    precision=getPrecision(tp,fp);
+	    recall=getRecall(tp,fn);
+	    f1Score=getScore(precision,recall);
+	    
 	    System.out.println(" Validity " +accouracy+" ");
+	    System.out.println(" precision " +precision+" "+"\n"+" Recall "+ recall+ "\n"+ " F1 Score "+f1Score);
+	    
 	}
 	
 	
+	public static double getPrecision(int tp,int fp)
+	{
+		return ((double)tp/(tp+fp));
+	}
+	
+	
+	public static double getRecall(int tp,int fn)
+	{
+		return ((double)tp/(tp+fn));
+	}
+	
+	
+	public static double getScore(double precision,double recall )
+	{
+		return (2*precision*recall)/(precision+recall);
+	}
+	
+	
+	public static int truePos(DataBlock[] Db,int [] num,int bound)
+	{
+		int tp=0;
+		for(int i=0;i<bound;i++) if(Db[num[i]].cl==Db[num[i]].predCl && Db[num[i]].cl==1) tp++;
+		return tp;
+	}
+	
+	
+	public static int trueNeg(DataBlock[] Db,int [] num,int bound)
+	{
+		int tn=0;
+		for(int i=0;i<bound;i++) if(Db[num[i]].cl==Db[num[i]].predCl  && Db[num[i]].cl==2) tn++;
+		return tn;
+	}
+	
+	
+	public static int falseNeg(DataBlock[] Db,int [] num,int bound)
+	{
+		int fn=0;
+		for(int i=0;i<bound;i++) if(Db[num[i]].cl!=Db[num[i]].predCl  && Db[num[i]].cl==1) fn++;
+		return fn;
+	}
+	
+	
+	public static int falsePos(DataBlock[] Db,int [] num,int bound)
+	{
+		int fp=0;
+		for(int i=0;i<bound;i++) if(Db[num[i]].cl!=Db[num[i]].predCl  && Db[num[i]].cl==2) fp++;
+		return fp;
+	}
 	
 	
 	public static double root(DataBlock x, DataBlock y)
 	{
 		return Math.sqrt((x.a-y.a)*(x.a-y.a)+(x.b-y.b)*(x.b-y.b)+(x.c-y.c)*(x.c-y.c));
 	}
+	
 	
 	public static int classFinder( double[] x,double y,int totalData)
 	{
@@ -54,6 +113,7 @@ public class Nearest {
 		}
 		return l;
 	}
+	
 	
 	public static double accouracyCheck(DataBlock[] Db,int[] num,int bound,int totalData)
 	{
@@ -70,6 +130,7 @@ public class Nearest {
 		validity=((double)predClass/bound)*100.0;
 		return validity;
 	}
+	
 	
 	
 	public static void knnAlgo(DataBlock[] Db,int[] num,int bound,int totalData )
@@ -121,10 +182,12 @@ public class Nearest {
 		}
 		
 	}
+	
+	
 	public static DataBlock[] dataReader() throws NumberFormatException, IOException
 	{
 		
-		File file= new File("E:\\db\\data.txt");
+		File file= new File("C:\\Users\\Rakib bhai\\Downloads\\datafile\\new.txt");
 		BufferedReader br =new BufferedReader(new FileReader(file));
 		String st;
 		DataBlock[] Db= new DataBlock[1110];
@@ -151,6 +214,7 @@ public class Nearest {
 		
 	}
 	
+	
 	public static void shuffle(DataBlock[] Db,int[] num,int parcent,int totalData)
 	{
 		Random ran= new Random(1001);
@@ -166,10 +230,8 @@ public class Nearest {
 				num[k]=n;
 				k++;
 				parcent--;
-			}
-			
-		}
-		
+			}		
+		}	
 	}
 	
 }
