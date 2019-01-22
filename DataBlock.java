@@ -1,20 +1,20 @@
 
 public class DataBlock {
-	public int a;
-	public int b;
-	public int c;
-	public int cl;
+	public int [] a;
 	public int predCl;
-	boolean testCase;
+	public int cl;
+	public boolean testCase;
 	
 	
-	public DataBlock(int foo1, int foo2, int foo3, int foo4) {
-		this.a=foo1;
-		this.b=foo2;
-		this.c=foo3;
-		this.cl=foo4;
+	
+	public DataBlock(int []x,int cl) {
+		
 		this.predCl=0;
+		this.cl=cl;
 		this.testCase=false;
+		a=new int [x.length];
+		for (int i=0; i<x.length; i++)
+	        a[i] = x[i];
 		// TODO Auto-generated constructor stub
 	}
 	

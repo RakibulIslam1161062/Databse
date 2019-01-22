@@ -97,7 +97,12 @@ public class Nearest {
 	
 	public static double root(DataBlock x, DataBlock y)
 	{
-		return Math.sqrt((x.a-y.a)*(x.a-y.a)+(x.b-y.b)*(x.b-y.b)+(x.c-y.c)*(x.c-y.c));
+		double val=0.0;
+		for(int jj=0;jj<x.a.length;jj++)
+		{
+			val+=(x.a[jj]-y.a[jj])*(x.a[jj]-y.a[jj]);
+		}
+		return Math.sqrt(val);
 	}
 	
 	
@@ -191,19 +196,30 @@ public class Nearest {
 		BufferedReader br =new BufferedReader(new FileReader(file));
 		String st;
 		DataBlock[] Db= new DataBlock[1110];
+		int sLength;
 		while((st=br.readLine())!= null)
 		{
 			
+			
 			String[] s=st.split(",");
+			sLength=s.length-1;
+			int []argArray= new int[sLength];
 			//System.out.println(j+"  "+s);
-			String s1 = null,s2 = null,s3 = null,s4 = null;
+			/*String s1 = null,s2 = null,s3 = null,s4 = null;
 			
 			int attribute1 =Integer.parseInt(s[0]);
 			int attribute2 =Integer.parseInt(s[1]);
 			int attribute3 =Integer.parseInt(s[2]);
 			int classs =Integer.parseInt(s[3]);
 			//System.out.println("foo4 here "+foo4);
-			 Db[j]=new DataBlock(attribute1,attribute2,attribute3,classs);
+			 * */
+			 
+			for(int ii=0;ii<sLength;ii++)
+			{
+				argArray[ii]=Integer.parseInt(s[ii]);
+			}
+			int cls=Integer.parseInt(s[sLength]);
+			 Db[j]=new DataBlock(argArray,cls);
 			
 			
 			//System.out.println(Db[j].a+" "+Db[j].b+" "+Db[j].c+" "+Db[j].cl);
